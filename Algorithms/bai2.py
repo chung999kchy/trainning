@@ -4,15 +4,38 @@
 # Tìm số bước nhỏ nhất để x = y.
 
 
-x = int(input())
-y = int(input())
-turn = 0
+class node:
+    def __init__(self, val, level):
+        self.val = val
+        self.level = level
 
-while x != y:
-    if x < y:
-        x *= 2
-        turn += 1
-    else:
-        x -= 1
-        turn += 1
-print(turn)
+#BFS
+def findStep(x, y):
+    visit = set()
+    q = []
+    n = node(x,0)
+    q.append(n)
+    while len(q) != 0:
+        t = q[0]
+        if (t.val == y):
+            return t.level
+
+        visit.add(t.val)
+
+        if (t.val * 2 == y or t.val - 1 == y):
+            return t.level+1
+
+        if (t.val * 2 not in visit):
+            n1 = node(t.val * 2,t.level + 1)
+            q.append(n1)
+        if (t.val - 1 >= 0 and t.val - 1 not in visit):
+            n2 = node(t.val-1,t.level + 1)            
+            q.append(n2)
+        q.pop(0)
+
+
+if __name__ == '__main__':
+
+    x = int(input())
+    y = int(input())
+    print('kq = ', findStep(x, y))
