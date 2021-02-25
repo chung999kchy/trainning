@@ -1,10 +1,6 @@
 import requests
 import json
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import base64
 import pandas as pd
 import csv
 
@@ -12,52 +8,26 @@ nameShop = 'chung999'
 email = 'Chung999kc@gmail.com'
 password = '12345'
 
-API_customer = '/api/2021-01/customers.json'
+API_customer = '/admin/api/2021-01/customers.json'
+API_key = '86d04b3d81f94c62cd22949a6b0e3c08'
+API_password = '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'
 
 
-url = 'https://accounts.shopify.com/store-login'
+def connectByApi():
+    access_token = API_key+':'+API_password
+    # message_bytes = access_token.encode('ascii')
+    # access_token = base64.b64encode(message_bytes)
+    url = 'https://{access_token}@{shop}.myshopify.com{api}'.format(
+        access_token=access_token, shop=nameShop, api=API_customer)
 
-
-def connect():
-    options = webdriver.ChromeOptions()
-    options.add_argument(
-        'user-agent = Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36')
-    driver = webdriver.Chrome(r'chromedriver.exe')
-    driver.get(url)
-
-    print(driver.current_url)
-    p = driver.find_element_by_name('shop[domain]')
-    p.send_keys(nameShop)
-    p = driver.find_element_by_name('commit').click()
-
-    print(driver.current_url)
-    u = driver.find_element_by_name('account[email]')
-    u.send_keys(email)
-    driver.find_element_by_name('commit').click()
-
-    print(driver.current_url)
-    wait = WebDriverWait(driver, 100)
-    q = wait.until(EC.visibility_of_element_located(
-        (By.NAME, 'account[password]')))
-    q.send_keys(password)
-
-    wait = WebDriverWait(driver, 100)
-    q = wait.until(EC.visibility_of_element_located(
-        (By.NAME, 'commit'))).click()
-
-    newUrl = driver.current_url
-    newUrl += API_customer
-    driver.get(newUrl)
-    content = driver.find_element_by_tag_name('pre').text
-    parsed_json = json.loads(content)
-    return parsed_json
+    response = requests.get(url)
+    response.encoding = 'utf-8'
+    return response.json()
 
 
 def save_csv(content):
-    # with open('data.json', 'w', encoding="utf-8") as f:
-    #     f.write(content)
-    # df = json.loads(content)
     df = content
+    print('a', df)
     f = csv.writer(
         open("test.csv", "w+", encoding='utf-8', newline=''))
 
@@ -67,7 +37,6 @@ def save_csv(content):
         key = []
         for j in i:
             key.append(j)
-
     print(key)
     f.writerow(key)
 
@@ -78,5 +47,5 @@ def save_csv(content):
         #csv_file = i.to_csv(r'./newCsv.csv', index=None, header=True)
 
 
-content = connect()
+content = connectByApi()
 save_csv(content)
