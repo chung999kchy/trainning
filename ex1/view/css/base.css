@@ -1,0 +1,45 @@
+:root {
+    --white-color: #fff;
+    --black-color: #000;
+    --text-color: #333;
+    --border-color: #bbb;
+}
+
+* {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+
+}
+
+a{
+    text-decoration: none;
+}
+
+html {
+    font-size: 62.5%;
+    line-height: 3rem;
+    box-sizing: border-box;
+}
+
+.namePage {
+    font-size: 2.5rem;
+    padding: 5px;
+
+}
+
+.thumb {
+    width: 70px;
+}
+
+.department {
+    margin: 0px auto;
+    width: 100%;
+    height: 1px;
+    background: #777;
+    
+}
+
+.bg-gray {
+    background-color: #f2f2f2;
+}

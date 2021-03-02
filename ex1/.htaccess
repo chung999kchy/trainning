@@ -1,0 +1,11 @@
+RewriteEngine On
+
+RewriteRule "index.html" "view/index.php"
+RewriteRule "controller/add" "view/NewPage.php"
+RewriteRule "^controller/view-list/$" "view/ManagePage.php"
+RewriteRule "^controller/view-list/([0-9]+)$" "view/ManagePage.php?page=$1"
+RewriteRule "^post/([0-9]+)$" "view/ShowPost.php?id=$1"
+RewriteRule "^controller/delete/([0-9]+)$" "controller/DeletePost.php?id=$1"
+RewriteRule "^controller/edit/([0-9]+)$" "view/EditPage.php?id=$1"
+RewriteRule "^user/view-list/$" "view/ListPost.php"
+RewriteRule "^user/view-list/([0-9]+)$" "view/ListPost.php?page=$1"
